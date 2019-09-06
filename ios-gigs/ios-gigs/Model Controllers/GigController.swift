@@ -67,7 +67,7 @@ class GigController {
             
             do {
                 request.httpBody = try encoder.encode(gig)
-                print (request.httpBody)
+                //print (request.httpBody)
             } catch {
                 NSLog("Error encoding data: \(error)")
                 completion(.encodingError)
