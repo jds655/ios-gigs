@@ -13,12 +13,11 @@ struct AuthUser: Encodable {
     let password: String
 }
 
-class AuthAPI {
+struct Bearer: Codable {
+    let token: String
+}
 
-    struct Bearer: Codable {
-        let token: String
-    }
-    
+class AuthAPI {
     private(set) var bearer: Bearer?
     
     var isSignedIn: Bool {

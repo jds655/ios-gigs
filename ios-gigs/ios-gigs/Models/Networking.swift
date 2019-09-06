@@ -22,5 +22,7 @@ enum NetworkError:String, Error {
     case noData = "There was no data returned from the request"
     case noDecode = "There was an error decoding data"
     case loginError = "There was an error signing in"
+    case noTaken = "There was no bearer token"
+    case noAuth = "You are not authorized to do this"
 }
 

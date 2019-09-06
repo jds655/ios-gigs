@@ -20,11 +20,14 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var goButton: UIButton!
+    @IBOutlet weak var internalView: UIView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        viewSetStyling(on: self.view)
+        internalView.backgroundColor = UIColor(rgb: 0x5e548e)
+        internalView.layer.cornerRadius = 6
         // Do any additional setup after loading the view.
     }
     
