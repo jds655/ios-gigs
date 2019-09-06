@@ -64,11 +64,12 @@ class GigsTableViewController: UITableViewController {
             let loginVC = segue.destination as? LoginViewController
             loginVC?.authAPI = authAPI
         case "ShowGigDetailSegue", "AddGigSegue":
-            let VC = segue.destination as? GigDetailViewController
-            guard let index = tableView.indexPathForSelectedRow?.row else { return }
-            if identifier == "ShowGigDetailSegue" { VC?.gig = gigController.gigs[index] }
-            VC?.authAPI = self.authAPI
-            VC?.gigController = self.gigController
+            let VC = segue.destination as! GigDetailViewController
+            if let index = tableView.indexPathForSelectedRow?.row {
+                if identifier == "ShowGigDetailSegue" { VC.gig = gigController.gigs[index] }
+            }
+            VC.authAPI = self.authAPI
+            VC.gigController = gigController
         default:
             break
         }

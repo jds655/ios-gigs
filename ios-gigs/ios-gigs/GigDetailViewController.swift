@@ -13,6 +13,7 @@ class GigDetailViewController: UIViewController {
     var gigController: GigController?
     var gig: Gig?
     
+    @IBOutlet weak var bigLabel: UILabel!
     @IBOutlet weak var jobTitleTextField: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var descriptionTextView: UITextView!
@@ -36,15 +37,40 @@ class GigDetailViewController: UIViewController {
     }
     
     @IBAction func saveTapped(_ sender: Any) {
+        guard let title = jobTitleTextField.text, !title.isEmpty ,
+            let description = descriptionTextView.text, !description.isEmpty,
+        let gigController = gigController  else {
+                
+                return
+                
+        }
+        let date = datePicker.date
+        let newGig = Gig(title: title, description: description, dueDate: date)
+        gigController.createGig(bearer: (authAPI?.bearer!)!, gig: newGig, completion: { (error) in
+            if let error = error {
+                NSLog("Error adding gig: \(error)")
+                return
+            }
+            let alert = UIAlertController(title: "Gigs", message: "Gig creation successful", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            
+            DispatchQueue.main.async {
+                self.present(alert, animated: true, completion: {
+                    self.saveButton.isEnabled = false
+                    self.dismiss(animated: true, completion: nil)
+                })
+            }
+        })
     }
     
     func updateViews() {
-        guard let gig = gig else { return }
+        guard let gig = gig else {
+            bigLabel.text = "New Gig"
+            return
+        }
+        bigLabel.text = gig.title
         jobTitleTextField.text = gig.title
-//        let df = DateFormatter()
-//        df.dateStyle = .short
-//        df.timeStyle = .none
-//        let date = df.string(from: gig.dueDate)
         datePicker.date = gig.dueDate
         descriptionTextView.text = gig.description
     }

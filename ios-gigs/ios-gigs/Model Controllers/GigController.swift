@@ -53,4 +53,49 @@ class GigController {
         }.resume()
         
     }
+    
+    func createGig (bearer: Bearer, gig: Gig, completion: @escaping (NetworkError?) -> Void) {
+        let requestURL = baseURL.appendingPathComponent("gigs")
+        var request = URLRequest(url: requestURL)
+        request.setValue("Bearer \(bearer.token)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = HTTPMethod.post.rawValue
+            
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            
+            do {
+                request.httpBody = try encoder.encode(gig)
+                print (request.httpBody)
+            } catch {
+                NSLog("Error encoding data: \(error)")
+                completion(.encodingError)
+                return
+            }
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode != 200 {
+                    if response.statusCode == 401 {
+                        completion (.noAuth)
+                    } else {
+                        NSLog("Response status code: \(response.statusCode)")
+                        completion(.responseError)
+                        return
+                    }
+                }
+            }
+            if let error = error {
+                NSLog("There was a network request error: \(error)")
+                completion(.otherError)
+                return
+            }
+            
+            guard let _ = data else {
+                completion(.noData)
+                return
+            }
+            self.gigs.append(gig)
+            completion(nil)
+            }.resume()
+    }
 }
