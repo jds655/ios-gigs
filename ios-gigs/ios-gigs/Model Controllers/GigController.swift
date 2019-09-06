@@ -17,6 +17,7 @@ class GigController {
         let requestURL = baseURL.appendingPathComponent("gigs")
         var request = URLRequest(url: requestURL)
         request.setValue("Bearer \(bearer.token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = HTTPMethod.get.rawValue
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -58,6 +59,7 @@ class GigController {
         let requestURL = baseURL.appendingPathComponent("gigs")
         var request = URLRequest(url: requestURL)
         request.setValue("Bearer \(bearer.token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = HTTPMethod.post.rawValue
             
             let encoder = JSONEncoder()
